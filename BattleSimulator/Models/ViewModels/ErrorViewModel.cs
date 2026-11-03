@@ -1,4 +1,4 @@
-namespace BattleSimulator.Models
+namespace BattleSimulator.Models.ViewModels
 {
     public class ErrorViewModel
     {

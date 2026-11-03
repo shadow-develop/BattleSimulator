@@ -1,4 +1,4 @@
-using BattleSimulator.Models;
+using BattleSimulator.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
