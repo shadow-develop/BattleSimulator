@@ -24,7 +24,7 @@
 - Contains the complete battle report.
 - Stores fighter IDs, winner, outcome, ending reason, total rounds, final HP, and all RoundResult objects.
 - Outcomes: Fighter A wins, Fighter B wins, or Draw.
-- Ending reasons: Knockout or 50-round limit.
+- Ending reasons: Death or 50-round limit.
 
 **6. BattleService**
 - Receives two characters and validates their combat configuration.
