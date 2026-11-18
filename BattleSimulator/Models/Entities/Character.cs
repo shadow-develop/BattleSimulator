@@ -36,13 +36,13 @@ namespace BattleSimulator.Models.Entities
             MaxHealth = maxHealth;
             CurrentHealth = MaxHealth;
 
-            if (accuracy <= 0) {
-                throw new ArgumentOutOfRangeException(nameof(accuracy), "Accuracy must be greater than zero.");
+            if (accuracy < 0 || accuracy > 100) {
+                throw new ArgumentOutOfRangeException(nameof(accuracy), "Accuracy must be between 0 and 100.");
             }
             Accuracy = accuracy;
 
-            if (evasion <= 0) {
-                throw new ArgumentOutOfRangeException(nameof(evasion), "Evasion must be greater than zero.");
+            if (evasion < 0 || evasion > 100) {
+                throw new ArgumentOutOfRangeException(nameof(evasion), "Evasion must be between 0 and 100.");
             }
             Evasion = evasion;
 

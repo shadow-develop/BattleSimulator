@@ -1,4 +1,5 @@
-﻿using BattleSimulator.Models.Entities;
+﻿using BattleSimulator.Battle.Enums;
+using BattleSimulator.Models.Entities;
 
 namespace BattleSimulator.Battle
 {
@@ -8,7 +9,7 @@ namespace BattleSimulator.Battle
 
         public int DefenderId { get; }
 
-        public bool IsHit { get; }
+        public AttackOutcome Outcome { get; }
 
         public int BaseDamage { get; }
 
@@ -16,11 +17,16 @@ namespace BattleSimulator.Battle
 
         public int DefenderRemainingHealth { get; }
 
-        public AttackResult(Character attacker, Character defender, bool isHit, int baseDamage, int finalDamage, int defenderRemainingHealth)
+        public AttackResult(Character attacker, Character defender, AttackOutcome outcome, int baseDamage, int finalDamage, int defenderRemainingHealth)
         {
             AttackerId = attacker?.Id ?? throw new ArgumentNullException(nameof(attacker), "Attacker cannot be null.");
             DefenderId = defender?.Id ?? throw new ArgumentNullException(nameof(defender), "Defender cannot be null.");
-            IsHit = isHit;
+
+            if (!Enum.IsDefined(typeof(AttackOutcome), outcome))
+            {
+                throw new ArgumentException("Invalid attack outcome.", nameof(outcome));
+            }
+            Outcome = outcome;
 
             ValidateNumbers(baseDamage, finalDamage, defenderRemainingHealth);
             BaseDamage = baseDamage;
