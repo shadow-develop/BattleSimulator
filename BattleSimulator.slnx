@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="BattleSimulator.Tests/BattleSimulator.Tests.csproj" Id="927bfa63-32ca-4153-8804-736f8bd8b5cc" />
   <Project Path="BattleSimulator/BattleSimulator.csproj" />
 </Solution>
