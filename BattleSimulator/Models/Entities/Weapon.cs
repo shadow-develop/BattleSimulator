@@ -17,6 +17,8 @@ namespace BattleSimulator.Models.Entities
 
         public string ImagePath { get; set; } = string.Empty;
 
+        private const int DamageCap = 1_000;
+
         public Weapon(string name, WeaponType weaponType, int maxDamage, int minDamage)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -39,15 +41,15 @@ namespace BattleSimulator.Models.Entities
                 _ => throw new ArgumentOutOfRangeException(nameof(weaponType), weaponType, "Choose a supported weapon type.")
             };
 
-            if (maxDamage <= 0)
+            if (maxDamage <= 0 || maxDamage > DamageCap)
             {
-                throw new ArgumentOutOfRangeException(nameof(maxDamage), "Max damage must be larger than 0");
+                throw new ArgumentOutOfRangeException(nameof(maxDamage), $"Maximum damage must be between 1 and {DamageCap}.");
             }
             MaxDamage = maxDamage;
 
             if (minDamage <= 0 || minDamage > maxDamage)
             {
-                throw new ArgumentOutOfRangeException(nameof(minDamage), "Min damage must be larger than 0 and less, or equal to Max damage");
+                throw new ArgumentOutOfRangeException(nameof(minDamage), $"Minimum damage must be between 1 and {maxDamage}.");
             }
             MinDamage = minDamage;
         }

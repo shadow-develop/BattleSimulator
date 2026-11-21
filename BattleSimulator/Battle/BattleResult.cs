@@ -61,9 +61,9 @@ namespace BattleSimulator.Battle
                 throw new ArgumentNullException(nameof(roundResults), "Round results cannot be null.");
             }
 
-            if (roundResults.Count == 0 || roundResults.Count > 50)
+            if (roundResults.Count == 0 || roundResults.Count > 15)
             {
-                throw new ArgumentException("Round list must contain between 1 and 50 rounds.", nameof(roundResults));
+                throw new ArgumentException("Round list must contain between 1 and 15 rounds.", nameof(roundResults));
             }
 
             if (roundResults.Any(r => r == null))

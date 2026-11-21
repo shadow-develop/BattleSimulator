@@ -4,6 +4,7 @@
     {
         FighterAWin,
         FighterBWin,
-        Draw
+        Draw,
+        None
     }
 }
