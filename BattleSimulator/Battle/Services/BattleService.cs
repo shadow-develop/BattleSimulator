@@ -1,5 +1,6 @@
 ﻿using BattleSimulator.Battle.Enums;
 using BattleSimulator.Models.Entities;
+using BattleSimulator.Models.Enums;
 
 namespace BattleSimulator.Battle.Services
 {
@@ -10,7 +11,9 @@ namespace BattleSimulator.Battle.Services
         private const double MinDodgeChance = 0.05;
         private const double MaxDodgeChance = 0.40;
         private const double PercentageScale = 100.0;
-        private const int MaxRounds = 50;
+        private const double DamageMultiplier = 1.25;
+        private const double DamageReduction = 0.75;
+        private const int MaxRounds = 15;
 
         public BattleResult SimulateBattle(Character fighterA, Character fighterB)
         {
@@ -162,11 +165,11 @@ namespace BattleSimulator.Battle.Services
                 return new AttackResult(attacker, defender, AttackOutcome.Dodge, 0, 0, defenderHealth);
             }
 
-            // The upper bound is exclusive. Use long arithmetic to include int.MaxValue safely.
             int baseDamage = (int)Random.Shared.NextInt64(
                 attacker.EquippedWeapon.MinDamage,
                 (long)attacker.EquippedWeapon.MaxDamage + 1);
-            int finalDamage = baseDamage;
+
+            int finalDamage = CalculateFinalDamage(baseDamage, attacker.EquippedWeapon.DamageType, defender.EquippedWeapon.DamageType);
 
             if (ReferenceEquals(defender, battleState.FighterA))
             {
@@ -180,6 +183,36 @@ namespace BattleSimulator.Battle.Services
             defenderHealth = CalculateDefenderHealth(battleState, defender);
 
             return new AttackResult(attacker, defender, AttackOutcome.Hit, baseDamage, finalDamage, defenderHealth);
+        }
+
+        private static int CalculateFinalDamage(int baseDamage, DamageType attackerDamageType, DamageType defenderDamageType)
+        {
+            switch (attackerDamageType)
+            {
+                case DamageType.Slashing:
+                    return defenderDamageType switch
+                    {
+                        DamageType.Blunt => (int)Math.Ceiling(baseDamage * DamageMultiplier),
+                        DamageType.Piercing => (int)Math.Floor(baseDamage * DamageReduction),
+                        _ => baseDamage
+                    };
+                case DamageType.Piercing:
+                    return defenderDamageType switch
+                    {
+                        DamageType.Slashing => (int)Math.Ceiling(baseDamage * DamageMultiplier),
+                        DamageType.Blunt => (int)Math.Floor(baseDamage * DamageReduction),
+                        _ => baseDamage
+                    };
+                case DamageType.Blunt:
+                    return defenderDamageType switch
+                    {
+                        DamageType.Piercing => (int)Math.Ceiling(baseDamage * DamageMultiplier),
+                        DamageType.Slashing => (int)Math.Floor(baseDamage * DamageReduction),
+                        _ => baseDamage
+                    };
+                default:
+                    return baseDamage;
+            }
         }
 
         private static int CalculateDefenderHealth(BattleState battleState, Character defender)
